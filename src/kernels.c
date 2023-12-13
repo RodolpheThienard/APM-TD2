@@ -37,29 +37,27 @@ is_inside (struct dart pos)
   Sequential version
 */
 void
-sequential ()
+sequential (i32 coeff)
 {
   usize inside = 0;
   srand (2);
   struct dart dart = { 0, 0 };
-  for (usize i = 0; i < TOT_DART; i++)
+  for (usize i = 0; i < TOT_DART * coeff; i++)
     {
       dart.x = (f64)rand () / (RAND_MAX);
       dart.y = (f64)rand () / (RAND_MAX);
       inside += is_inside (dart);
     }
-  f64 pi = compute_pi (inside, TOT_DART);
-  printf ("SEQUENTIAL Pi = %lf\n", pi);
+  f64 pi = compute_pi (inside, TOT_DART * coeff);
+  printf ("SEQUENTIAL Pi = %lf;", pi);
 }
 
 /*
   OMP version
 */
 void
-omp ()
+omp (i32 coeff)
 {
-  srand (1);
-
   usize inside, total_threads;
   total_threads = omp_get_num_procs ();
   f64 *inside_omp, *pi_omp, pi;
@@ -70,16 +68,16 @@ omp ()
     struct dart dart;
     i32 id = omp_get_thread_num ();
 #pragma omp for
-    for (usize i = 0; i < TOT_DART; i++)
+    for (usize i = 0; i < TOT_DART * coeff; i++)
       {
         gen_dart (&dart, (u32)i);
         inside_omp[id] += is_inside (dart);
       }
-    pi_omp[id] = compute_pi (inside_omp[id], TOT_DART);
+    pi_omp[id] = compute_pi (inside_omp[id], TOT_DART * coeff);
   }
   for (usize i = 0; i < total_threads; i++)
     pi += pi_omp[i];
-  printf ("OMP Pi = %lf\n", pi);
+  printf ("OMP Pi; = %9lf;", pi);
 }
 
 /*
@@ -101,7 +99,7 @@ target_kernel (f64 *inside_cuda, f64 pi, usize n)
             struct dart dart;
             gen_dart (&dart, (u32)j);
             inside_cuda[j] += is_inside (dart);
-            pi += compute_pi (inside_cuda[j], TOT_DART);
+            pi += compute_pi (inside_cuda[j], n);
           }
       }
   }
@@ -112,12 +110,12 @@ target_kernel (f64 *inside_cuda, f64 pi, usize n)
   Target version
 */
 void
-target ()
+target (i32 coeff)
 {
   f64 *inside_cuda, pi = 0;
-  ALLOC (inside_cuda, TOT_DART);
+  ALLOC (inside_cuda, TOT_DART * coeff);
 
-  pi = target_kernel (inside_cuda, pi, TOT_DART);
+  pi = target_kernel (inside_cuda, pi, TOT_DART * coeff);
 
-  printf ("CUDA Pi = %lf\n", pi);
+  printf ("Target = %lf;", pi);
 }

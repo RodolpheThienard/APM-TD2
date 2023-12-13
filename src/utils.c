@@ -16,12 +16,13 @@ gen_dart (struct dart *dart, u32 seed)
   INPUT : void function kernel
 */
 void
-benchmark (void (*func) (), char *name)
+benchmark (void (*func) (i32), i32 coeff, char *name)
 {
   struct timespec t1, t2;
   clock_gettime (CLOCK_MONOTONIC_RAW, &t1);
-  func ();
+  func (coeff);
   clock_gettime (CLOCK_MONOTONIC_RAW, &t2);
-  printf ("Total elapsed time for %s : %lfsec\n", name,
-          (t2.tv_nsec * 1e-9 - t1.tv_nsec * 1e-9));
+  printf (" %lf ; %d\n",
+          ((t2.tv_sec + t2.tv_nsec * 1e-9) - (t1.tv_sec + t1.tv_nsec * 1e-9)),
+          coeff);
 }

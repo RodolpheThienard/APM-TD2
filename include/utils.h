@@ -37,6 +37,6 @@ struct dart
 #define SQUARE(X) (X * X)
 
 void gen_dart (struct dart *dart, u32 seed);
-void benchmark (void (*func) (), char *name);
+void benchmark (void (*func) (i32), i32 coeff, char *name);
 
 #endif

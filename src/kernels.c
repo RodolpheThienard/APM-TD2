@@ -63,8 +63,8 @@ omp ()
   usize inside, total_threads;
   total_threads = omp_get_num_procs ();
   f64 *inside_omp, *pi_omp, pi;
-  ALLOC (sizeof (f64) * total_threads, inside_omp);
-  ALLOC (sizeof (f64) * total_threads, pi_omp);
+  ALLOC (inside_omp, total_threads);
+  ALLOC (pi_omp, total_threads);
 #pragma omp parallel num_threads(total_threads)
   {
     struct dart dart;
@@ -115,7 +115,7 @@ void
 target ()
 {
   f64 *inside_cuda, pi = 0;
-  ALLOC (sizeof (f64) * TOT_DART, inside_cuda);
+  ALLOC (inside_cuda, TOT_DART);
 
   pi = target_kernel (inside_cuda, pi, TOT_DART);
 

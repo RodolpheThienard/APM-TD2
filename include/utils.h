@@ -21,11 +21,16 @@ struct dart
   f64 y;
 };
 
-#define ALLOC(X, Y)                                                           \
+#define ALLOC(X, n)                                                           \
   do                                                                          \
     {                                                                         \
-      Y = malloc (X);                                                         \
-      memset (Y, 0, X);                                                       \
+      X = malloc (sizeof (*X) * n);                                           \
+      if (!X)                                                                 \
+        {                                                                     \
+          perror ("malloc");                                                  \
+          exit (1);                                                           \
+        }                                                                     \
+      memset (X, 0, sizeof (*X) * n);                                         \
     }                                                                         \
   while (0)
 

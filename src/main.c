@@ -9,7 +9,7 @@ main (i32 argc, char *argv[])
 #ifdef BENCH
   benchmark (sequential, coeff, "Sequential");
   benchmark (omp, coeff, "OMP");
-  benchmark (target, coeff, "CUDA");
+  benchmark (target, coeff, "Target");
 #else
   sequential (coeff);
   omp (coeff);

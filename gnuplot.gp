@@ -18,8 +18,8 @@ set ylabel "Valeur de Pi"
 set yrange[3.1418: 3.1415]
 
 # Ajout de l'axe horizontal avec le titre
-set arrow 1 from graph 0, first 3.141593 to graph 1, first 3.141593 nohead lt 2 lw 2
-set label "Valeur de PI" at 1.2, first 3.141593-0.00002 center tc lt 2
+set arrow 1 from graph 0, first 3.141593 to graph 1, first 3.141593 nohead lt 2 lw 2 lc "red"
+set label "Valeur de PI" at 45, first 3.141593-0.00002 center tc "red"  
 
 
 plot 'BUILD/values.dat' every 4::1 using 4:2 with linespoints title 'SEQUENTIAL Pi', \

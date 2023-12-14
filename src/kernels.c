@@ -49,7 +49,7 @@ sequential (i32 coeff)
       inside += is_inside (dart);
     }
   f64 pi = compute_pi (inside, TOT_DART * coeff);
-  printf ("SEQUENTIAL Pi = %lf;", pi);
+  printf ("SEQUENTIAL Pi ; %lf;", pi);
 }
 
 /*
@@ -63,7 +63,7 @@ omp (i32 coeff)
   f64 *inside_omp, *pi_omp, pi;
   ALLOC (inside_omp, total_threads);
   ALLOC (pi_omp, total_threads);
-#pragma omp parallel num_threads(total_threads)
+#pragma omp parallel
   {
     struct dart dart;
     i32 id = omp_get_thread_num ();
@@ -77,7 +77,7 @@ omp (i32 coeff)
   }
   for (usize i = 0; i < total_threads; i++)
     pi += pi_omp[i];
-  printf ("OMP Pi; = %9lf;", pi);
+  printf ("OMP Pi; %9lf;", pi);
 }
 
 /*
@@ -117,5 +117,5 @@ target (i32 coeff)
 
   pi = target_kernel (inside_cuda, pi, TOT_DART * coeff);
 
-  printf ("Target = %lf;", pi);
+  printf ("Target ; %lf;", pi);
 }
